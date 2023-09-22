@@ -12,13 +12,16 @@ def start_record(name):
         FFMPEG_BIN,
         '-f', 'gdigrab',
         '-framerate', 'ntsc',
-        '-offset_x', '-1920',
+        '-offset_x', '0',
         '-offset_y', '0',
         '-video_size', '1920x1080',
         '-i', 'desktop',
+        # УЗНАТЬ НАЗВАНИЕ УСТРОЙСТВА
         # '-list_devices', 'true',
         '-f', 'dshow',
         # '-i', 'dummy',
+        
+        # НАЗВАНИЕ УСТРОЙСТВА
         '-i', 'audio=@device_cm_{33D9A762-90C8-11D0-BD43-00A0C911CE86}\wave_{8D96F64C-944C-4E3F-B6F2-E0C185CAB755}',
         video_file
     ]
@@ -32,8 +35,9 @@ def end_record(ffmpeg):
     ffmpeg.stdin.close()
 
 def main():
-    ffmpeg = start_record("1")
-    time.sleep(10)
+    # Проверка записи в течение 15 секунд
+    ffmpeg = start_record("test")
+    time.sleep(15)
     end_record(ffmpeg)
 
 if __name__ == "__main__":

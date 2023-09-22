@@ -13,14 +13,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 import recorder as rec
 
-def recording():
-    s = Service(executable_path='C:\\Users\\IvanS\\OneDrive\\Документы\\Я\\Записи лекций\\chromedriver-win64\\chromedriver.exe')
+def recording(url, name):
+    s = Service(executable_path='C:\\Users\\IvanS\\OneDrive\\Документы\\Я\\Записи лекций\\Recorder\\chromedriver-win64\\chromedriver.exe')
     driver = webdriver.Chrome(service=s)
 
     try:
         driver.set_window_position(0, 0)
         driver.maximize_window()
-        driver.get('https://events.webinar.ru/57009101/2125390510/session/1641136281')
+        driver.get(url)
         time.sleep(10)
         flag = 1
         while flag:
@@ -33,10 +33,9 @@ def recording():
             except Exception as ex:
                 pass
         
-        ffmpeg = rec.start_record('analytic')
-        time.sleep(6000)
+        ffmpeg = rec.start_record(name)
+        time.sleep(5700) # Длительность вебинара
         rec.end_record(ffmpeg)
-        # btn PrepareVCSButtons-module__mainAction___ziopu btn_material
     except Exception as ex:
         print(ex)
     finally:
@@ -44,10 +43,12 @@ def recording():
         driver.quit()
         
 def main():
-    # schedule.every().wednesday.at('14:25').do(recording)
-    recording()
-    # while True:
-    #     schedule.run_pending()
-    
+    # Расписание
+    schedule.every().wednesday.at('14:30').do(recording, name='third', url='https://events.webinar.ru/19396923/1092481784/session/161488321')
+    schedule.every().wednesday.at('16:10').do(recording, name='fourth', url='https://events.webinar.ru/19396587/1933155138/session/2006684246')
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+        
 if __name__ == "__main__":
     main()
